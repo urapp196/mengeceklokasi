@@ -27,30 +27,33 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
       minHeight: "100dvh",
       display: "flex",
       flexDirection: "column",
-      paddingBottom: 64,             /* space for bottom nav */
       background: "var(--bg-primary)",
+      paddingBottom: "calc(64px + env(safe-area-inset-bottom))",
     }}>
       {/* ─── TOP HEADER ─── */}
       <header style={{
         position: "sticky", top: 0, zIndex: 100,
-        background: "rgba(10,14,26,0.95)",
+        background: "rgba(10,14,26,0.97)",
         backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         borderBottom: "1px solid var(--border)",
+        paddingTop: "env(safe-area-inset-top)",
       }}>
         <div style={{
           display: "flex", alignItems: "center",
           justifyContent: "space-between",
-          padding: "12px 16px",
+          padding: "14px 16px",
         }}>
           {/* Logo */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
-              width: 32, height: 32, borderRadius: 8,
+              width: 34, height: 34, borderRadius: 9,
               background: "linear-gradient(135deg,#4f8ef7,#7c3aed)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 15, boxShadow: "0 3px 10px rgba(79,142,247,0.4)",
+              fontSize: 16, boxShadow: "0 3px 12px rgba(79,142,247,0.45)",
+              flexShrink: 0,
             }}>📍</div>
-            <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: "-0.3px" }}>
+            <span style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-0.4px", lineHeight: 1 }}>
               Maps<span style={{ color: "var(--accent)" }}>Tracker</span>
             </span>
           </div>
@@ -60,7 +63,7 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
             <div className="pulse-dot" />
             <span style={{
               background: "rgba(79,142,247,0.12)", border: "1px solid rgba(79,142,247,0.2)",
-              color: "#93bbfc", borderRadius: 20, padding: "3px 10px",
+              color: "#93bbfc", borderRadius: 20, padding: "4px 12px",
               fontSize: 12, fontWeight: 700,
             }}>
               {coords.length} lokasi
@@ -70,7 +73,7 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
 
         {/* Search bar (only on search tab) */}
         {activeTab === "search" && (
-          <div style={{ padding: "0 16px 12px" }}>
+          <div style={{ padding: "0 16px 14px" }}>
             <div style={{ position: "relative" }}>
               <span style={{
                 position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
@@ -82,7 +85,7 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
                 placeholder="Cari nama atau koordinat..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{ paddingLeft: 40 }}
+                style={{ paddingLeft: 40, fontSize: 15 }}
                 autoFocus
               />
             </div>
@@ -91,19 +94,19 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
       </header>
 
       {/* ─── MAIN CONTENT ─── */}
-      <main style={{ flex: 1, padding: "16px 14px" }}>
+      <main style={{ flex: 1, padding: "16px 14px 8px" }}>
 
         {/* Section title */}
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 16 }}>
           <h1 style={{
-            fontSize: 20, fontWeight: 800,
+            fontSize: 22, fontWeight: 800,
             background: "linear-gradient(135deg,#f0f4ff,#93bbfc)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            letterSpacing: "-0.4px",
+            letterSpacing: "-0.5px",
           }}>
             {activeTab === "search" ? `Hasil: ${filtered.length}` : "Semua Lokasi"}
           </h1>
-          <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 3 }}>
+          <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4, lineHeight: 1.4 }}>
             {activeTab === "search"
               ? "Ketuk kartu untuk buka Google Maps"
               : "Ketuk ⋯ pada kartu untuk lihat aksi"}
@@ -113,19 +116,19 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
         {/* Empty: no coords at all */}
         {coords.length === 0 && (
           <div style={{
-            textAlign: "center", padding: "60px 20px",
+            textAlign: "center", padding: "52px 20px 56px",
             background: "var(--bg-card)", border: "1px dashed var(--border)",
-            borderRadius: 20, marginTop: 8,
+            borderRadius: 20, marginTop: 4,
           }}>
-            <div style={{ fontSize: 54, marginBottom: 14 }}>🗺️</div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>Belum ada lokasi</h3>
-            <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20 }}>
-              Ketuk tombol <strong>+</strong> di bawah untuk menambah koordinat
+            <div style={{ fontSize: 56, marginBottom: 14 }}>🗺️</div>
+            <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>Belum ada lokasi</h3>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 22, lineHeight: 1.5 }}>
+              Ketuk tombol <strong style={{ color: "var(--accent)" }}>+</strong> di bawah<br/>untuk menambah koordinat pertamamu
             </p>
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "rgba(79,142,247,0.08)", border: "1px solid rgba(79,142,247,0.15)",
-              borderRadius: 20, padding: "8px 16px", fontSize: 12, color: "var(--accent)",
+              borderRadius: 20, padding: "8px 18px", fontSize: 13, color: "var(--accent)",
             }}>
               <span style={{ fontSize: 18 }}>👇</span> Ketuk + di bawah
             </div>
@@ -139,9 +142,10 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
             background: "var(--bg-card)", border: "1px dashed var(--border)",
             borderRadius: 20,
           }}>
-            <div style={{ fontSize: 36, marginBottom: 10 }}>🔍</div>
-            <p style={{ color: "var(--text-muted)", fontSize: 13 }}>
-              Tidak ada hasil untuk <strong style={{ color: "var(--text-secondary)" }}>"{search}"</strong>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+            <p style={{ color: "var(--text-muted)", fontSize: 13, lineHeight: 1.5 }}>
+              Tidak ada hasil untuk{" "}
+              <strong style={{ color: "var(--text-secondary)" }}>"{search}"</strong>
             </p>
           </div>
         )}
@@ -159,6 +163,8 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
                 isMobile={true}
               />
             ))}
+            {/* Extra spacer so last card isn't hidden behind FAB */}
+            <div style={{ height: 10 }} />
           </div>
         )}
       </main>
@@ -169,19 +175,20 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
         aria-label="Tambah koordinat"
         style={{
           position: "fixed",
-          bottom: 76, right: 18,
-          width: 54, height: 54,
+          bottom: "calc(72px + env(safe-area-inset-bottom))",
+          right: 18,
+          width: 56, height: 56,
           borderRadius: "50%",
           background: "linear-gradient(135deg,#4f8ef7,#7c3aed)",
           border: "none",
-          color: "#fff", fontSize: 26,
+          color: "#fff", fontSize: 28,
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "0 6px 24px rgba(79,142,247,0.55), 0 2px 8px rgba(0,0,0,0.4)",
           cursor: "pointer", zIndex: 200,
           transition: "transform 0.15s, box-shadow 0.15s",
           WebkitTapHighlightColor: "transparent",
         }}
-        onPointerDown={e => e.currentTarget.style.transform = "scale(0.9)"}
+        onPointerDown={e => e.currentTarget.style.transform = "scale(0.88)"}
         onPointerUp={e => e.currentTarget.style.transform = "scale(1)"}
         onPointerLeave={e => e.currentTarget.style.transform = "scale(1)"}
       >
@@ -191,15 +198,16 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
       {/* ─── BOTTOM NAV ─── */}
       <nav style={{
         position: "fixed", bottom: 0, left: 0, right: 0,
-        height: 64,
         background: "rgba(10,14,26,0.97)",
         backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
         borderTop: "1px solid var(--border)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-around",
         paddingBottom: "env(safe-area-inset-bottom)",
         zIndex: 100,
+        height: "calc(64px + env(safe-area-inset-bottom))",
       }}>
         {[
           { id: "home",   icon: "📍", label: "Lokasi" },
@@ -212,16 +220,18 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
             style={{
               display: "flex", flexDirection: "column",
               alignItems: "center", gap: 3,
-              padding: "6px 20px",
+              paddingTop: 10, paddingBottom: 6,
+              paddingLeft: 20, paddingRight: 20,
               border: "none", background: "none",
               color: (activeTab === tab.id && tab.id !== "add")
                 ? "var(--accent)"
-                : "var(--text-muted)",
+                : tab.id === "add" ? "var(--text-secondary)" : "var(--text-muted)",
               fontSize: 10, fontWeight: 700,
               cursor: "pointer", fontFamily: "inherit",
               WebkitTapHighlightColor: "transparent",
               transition: "color 0.2s",
               flex: 1,
+              minHeight: 64,
             }}
           >
             <span style={{
@@ -229,17 +239,18 @@ export default function MobileDashboard({ coords, onAdd, onEdit, onDelete }) {
               filter: (activeTab === tab.id && tab.id !== "add")
                 ? "drop-shadow(0 0 6px rgba(79,142,247,0.7))"
                 : "none",
-              transition: "filter 0.2s",
+              transition: "filter 0.2s, transform 0.15s",
+              transform: tab.id === "add" ? "scale(0.9)" : "scale(1)",
             }}>
               {tab.icon}
             </span>
-            <span style={{ letterSpacing: "0.03em" }}>{tab.label}</span>
+            <span style={{ letterSpacing: "0.03em", lineHeight: 1 }}>{tab.label}</span>
             {/* Active indicator dot */}
             {activeTab === tab.id && tab.id !== "add" && (
               <div style={{
                 width: 4, height: 4, borderRadius: "50%",
                 background: "var(--accent)",
-                marginTop: 1,
+                marginTop: 2,
               }} />
             )}
           </button>

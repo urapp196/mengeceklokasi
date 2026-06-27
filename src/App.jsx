@@ -4,6 +4,14 @@ import Toast from "./components/Toast";
 
 const STORAGE_KEY = "maps_tracker_coords";
 
+function saveToStorage(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.error("Gagal menyimpan:", e);
+  }
+}
+
 export default function App() {
   const [coords, setCoords] = useState(() => {
     try {
@@ -16,22 +24,39 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const coordsRef = useRef(coords);
 
-  // Keep ref in sync so beforeunload always has latest data
+  // Keep ref in sync so event listeners always have latest data
   useEffect(() => {
     coordsRef.current = coords;
   }, [coords]);
 
-  // Save to localStorage ONLY when user leaves the page
+  // ✅ Simpan SETIAP KALI coords berubah — penting untuk mobile
   useEffect(() => {
-    function handleBeforeUnload() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(coordsRef.current));
-      } catch (e) {
-        console.error("Gagal menyimpan:", e);
+    saveToStorage(coords);
+  }, [coords]);
+
+  // ✅ Cadangan: simpan saat tab disembunyikan (mobile switch app, dll)
+  useEffect(() => {
+    function handleVisibilityChange() {
+      if (document.visibilityState === "hidden") {
+        saveToStorage(coordsRef.current);
       }
     }
+    // pagehide lebih andal dari beforeunload di iOS Safari
+    function handlePageHide() {
+      saveToStorage(coordsRef.current);
+    }
+    function handleBeforeUnload() {
+      saveToStorage(coordsRef.current);
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", handlePageHide);
     window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", handlePageHide);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, []);
 
   const showToast = useCallback((message, type = "info") => {
